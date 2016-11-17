@@ -4,7 +4,7 @@
 #define _USE_MATH_DEFINES
 #include<list>
 
-//*************code modified from github: Nature of code by Daniel Shiffman***********
+//***      Code modified from the work of Daniel Shiffman on github: The-Nature-of-Code-Examples   ***
 
 void Boid::run(std::vector<Boid> boids)
 {
@@ -19,7 +19,8 @@ void Boid::update()
     m_velocity.limit(m_maxspeed);
     m_position+=m_velocity;
 
-    m_acceleration.mult(0);                     // resetting acceleration to 0 after each cycle
+    // resetting acceleration to 0 after each cycle
+    m_acceleration.mult(0);
 }
 
 void Boid::applyForce(PVector _force)
@@ -38,10 +39,14 @@ void Boid::flock(std::vector<Boid> boids)
     PVector coh = cohesion(boids);
     PVector swm = swarm(boids);
 
+    /* assigning weights to individual behaviors
+     * and applying the returned steering force
+     */
+
     sep.mult(2);
-    ali.mult(1.0);                              // assigning weights to individual behaviors
+    ali.mult(1.0);
     coh.mult(1.0);
-    swm.mult(0);
+    swm.mult(3);
 
     applyForce(sep);
     applyForce(ali);
@@ -67,28 +72,31 @@ PVector Boid::seek(PVector _target)
 }
 
 
-PVector Boid::separate(std::vector<Boid> boids)     //method to check if a neighboring boid is within a certain distance
+// method to move away if a neighboring boid is within the line of sight
+PVector Boid::separate(std::vector<Boid> _boids)
 {
-    float desiredseparation = 100.0f;               //
+    float desiredseparation = 100.0f;
     PVector steer(0.0,0.0);
     int count = 0;
 
-    for(Boid const &other : boids)
+    for(Boid const &other : _boids)
     {
         float d = m_position.dist(m_position,other.m_position);
         if((d>0) && (d<desiredseparation))
         {
-            PVector diff = other.m_position - m_position;
+            //find the and add the distance between this boid's location and all neighbor boids' location
+            PVector diff = m_position - other.m_position;
             diff.normalise();
             diff.div(d);
-            steer+=diff;                           //adding up the differnce vectors for all neighbors
+            steer+=diff;
             count++;
         }
     }
 
     if(count > 0)
     {
-        steer.div((float)count);                  //desired velocity is the avg velocity
+        //the average will be used as desired velocity for steering in opp direction to neighbors
+        steer.div((float)count);
     }
 
     if(steer.mag() > 0)
@@ -102,12 +110,14 @@ PVector Boid::separate(std::vector<Boid> boids)     //method to check if a neigh
 }
 
 
-PVector Boid::align(std::vector<Boid> boids)        //
+// method to match a boid's velocity with that of its neighbors
+PVector Boid::align(std::vector<Boid> _boids)
 {
     float neighbourdist = 100;
     PVector sum(0,0);
     int count = 0;
-    for(Boid const &other : boids)
+    //desired velocity = avg velocity of all the boids
+    for(Boid &other : _boids)
     {
         float d = m_position.dist(m_position, other.m_position);
         if((d>0) && (d<neighbourdist))
@@ -129,46 +139,41 @@ PVector Boid::align(std::vector<Boid> boids)        //
         return PVector(0.0,0.0);
 }
 
-PVector Boid::cohesion(std::vector<Boid> boids)     //
+PVector Boid::cohesion(std::vector<Boid> _boids)     // boids ability to group together
 {
     float neighbordist = 100;
     PVector sum(0,0);
     int count = 0;
-    for(Boid const &other : boids)
+    for(Boid &other : _boids)
     {
         float d = m_position.dist(m_position, other.m_position);
         if((d>0) && (d<neighbordist))
         {
-            sum+=other.m_position;
+            sum+=other.m_position;                 // add the positions of all the neigbors
             count++;
         }
     }
     if(count>0)
     {
-        sum.div(count);
-        return seek(sum);                          //
+        sum.div(count);                            // calculate the avg position
+        return seek(sum);                          // seek the avg
     }
     else
         return PVector(0.0,0.0);
 }
 
-//*****************************************************************
+//********************************************** END *******************************************************
+
+
 void Boid::view(std::vector<Boid> boids)
 {
-    float x;
-    float y;
-    float step = 0.01;
-    float constA = 2;
-    float constB = 3;
-    float arcLength;
-    float curvature;
-    float tangentialAngle;
-    float golden_angle = M_PI*(3-sqrt(5));
+    float lineOfSight = 500;
+    float viewAngle = M_PI/4;
+
     std::vector<Boid>::iterator it;
 
     PVector steer(0.0,0.0);
     int count = 500;
-    float theta = 0.0;
     PVector pos(x,y);
 
    // for(it=boids.begin(); it!=boids.end(); it++)
@@ -193,8 +198,8 @@ void Boid::view(std::vector<Boid> boids)
   //  }
 }
 
-
-PVector Boid::swarm(std::vector<Boid> boids)
+// method to gather the boids like swarms of insects
+PVector Boid::swarm(std::vector<Boid> _boids)
 {
     float lineOfSight = 500;
     float viewAngle = M_PI/4;
@@ -202,9 +207,9 @@ PVector Boid::swarm(std::vector<Boid> boids)
 
     PVector steer(0.0,0.0);
     int count = 0;
-    float theta = 0.0;
 
-    for(it=boids.begin(); it!=boids.end(); it++)
+    //the boid checks other boids within its viewAngle, finds the difference vector from each and directs it clockwise normally
+    for(it=_boids.begin(); it!=_boids.end(); it++)
     {
         float dist = m_position.dist(m_position, it->m_position);
         PVector direction = m_position - it->m_position;
@@ -212,7 +217,6 @@ PVector Boid::swarm(std::vector<Boid> boids)
 
         if((float)abs(theta)<viewAngle && dist>0 && dist<lineOfSight)
         {
-           // PVector dirFromBegin = boids.begin()->m_position - it->m_position;
             direction.getNormalClockwise();
             direction.normalise();
             direction.div(dist);

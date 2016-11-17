@@ -13,11 +13,13 @@ protected:
 
 public:
 
-    Flock(Boid b, int num);
+    Flock(Boid _b, int _num);
 
-    void runflock(); //calls run func of Boid class for each boid
+    //calls run func of Boid class for each boid
+    void runflock();
 
-    void addBoid(Boid b, int num); //adds num amount of new Boid to the flock
+    //adds num amount of new Boid to the flock
+    void addBoid(Boid _b, int _num);
 
     void draw(Image &_i)const;
 };

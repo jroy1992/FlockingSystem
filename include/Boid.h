@@ -18,7 +18,7 @@ public:
 
     Boid():m_acceleration(0.0f,0.0f),m_velocity(1.0f,1.0f){}
 
-    Boid(PVector pos):m_position(pos.getX(),pos.getY())
+    Boid(PVector _pos):m_position(_pos.getX(),_pos.getY())
     {
         m_r = 3.0;
         m_maxspeed = 4;
