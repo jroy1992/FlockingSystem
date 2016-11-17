@@ -43,10 +43,10 @@ void Boid::flock(std::vector<Boid> boids)
      * and applying the returned steering force
      */
 
-    sep.mult(2);
-    ali.mult(1.0);
-    coh.mult(1.0);
-    swm.mult(3);
+    sep.mult(1);
+    ali.mult(2.0);
+    coh.mult(2.0);
+    swm.mult(0);
 
     applyForce(sep);
     applyForce(ali);
@@ -60,6 +60,7 @@ void Boid::draw(Image &_i) const
 }
 
 
+//find the distance between boid location and target and steer towards target with maxForce
 PVector Boid::seek(PVector _target)
 {
     PVector desired = _target - m_position;
@@ -75,7 +76,7 @@ PVector Boid::seek(PVector _target)
 // method to move away if a neighboring boid is within the line of sight
 PVector Boid::separate(std::vector<Boid> _boids)
 {
-    float desiredseparation = 100.0f;
+    float desiredseparation = 5.0f;
     PVector steer(0.0,0.0);
     int count = 0;
 
@@ -139,24 +140,28 @@ PVector Boid::align(std::vector<Boid> _boids)
         return PVector(0.0,0.0);
 }
 
-PVector Boid::cohesion(std::vector<Boid> _boids)     // boids ability to group together
+
+// boids ability to group together
+PVector Boid::cohesion(std::vector<Boid> _boids)
 {
     float neighbordist = 100;
     PVector sum(0,0);
     int count = 0;
+
+    // add the positions of all the neigbors and seek the avg position
     for(Boid &other : _boids)
     {
         float d = m_position.dist(m_position, other.m_position);
         if((d>0) && (d<neighbordist))
         {
-            sum+=other.m_position;                 // add the positions of all the neigbors
+            sum+=other.m_position;
             count++;
         }
     }
     if(count>0)
     {
-        sum.div(count);                            // calculate the avg position
-        return seek(sum);                          // seek the avg
+        sum.div(count);
+        return seek(sum);
     }
     else
         return PVector(0.0,0.0);
@@ -174,17 +179,10 @@ void Boid::view(std::vector<Boid> boids)
 
     PVector steer(0.0,0.0);
     int count = 500;
-    PVector pos(x,y);
+    PVector pos(0.0,0.0);
 
-   // for(it=boids.begin(); it!=boids.end(); it++)
-   // {
-        theta = count*golden_angle;
-        float r = sqrt(count)/sqrt(500);
-        pos.setX(r*cos(theta));
-        pos.setY(r*sin(theta));
-        //m_position.setX(x);
-        //m_position.setY(y);
-
+    for(it=boids.begin(); it!=boids.end(); it++)
+    {
         float dist = m_position.dist(m_position, pos);
         if(dist>0.1)
         {
@@ -195,10 +193,11 @@ void Boid::view(std::vector<Boid> boids)
 
         }
         //count++;
-  //  }
+    }
 }
 
-// method to gather the boids like swarms of insects
+
+// method to gather the boids like swarms of flies
 PVector Boid::swarm(std::vector<Boid> _boids)
 {
     float lineOfSight = 500;

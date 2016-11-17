@@ -21,6 +21,8 @@ SOURCES=$$PWD/src/main.cpp \
         $$PWD/src/Flock.cpp \
         $$PWD/src/Boid.cpp \
         $$PWD/src/PVector.cpp \
+        $$PWD/src/Target.cpp \
+        $$PWD/src/colorPalette.cpp \
 
 
 
@@ -28,7 +30,9 @@ HEADERS =$$PWD/../common/Image.h \
          $$PWD/../common/Framebuffer.h \
          $$PWD/include/PVector.h \
          $$PWD/include/Flock.h \
-         $$PWD/include/Boid.h
+         $$PWD/include/Boid.h \
+         $$PWD/include/Target.h \
+         $$PWD/include/colorPalette.h \
 
 
 INCLUDEPATH +=$$PWD/include
