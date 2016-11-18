@@ -14,8 +14,9 @@ Flock::Flock(Boid _b, int _num)
     }
 }
 
-//***      Code modified from the work of Daniel Shiffman on github: The-Nature-of-Code-Examples   ***
-
+/// The following section is from :-
+/// Daniel Shiffman (2016). Nature of Code Examples [online]. [Accessed 2016]
+/// Available from: "https://github.com/shiffman/The-Nature-of-Code-Examples/tree/master/chp06_agents/NOC_6_09_Flocking".
 void Flock::runflock()
 {
     //passing the boid list to each boid
@@ -30,7 +31,7 @@ void Flock::addBoid(Boid _b, int _num)
     for(size_t i=0; i<_num; i++)
         m_boids.push_back(_b);
 }
-//******************************************* END *******************************************
+/// End citation
 
 void Flock::draw(Image &_i)const
 {

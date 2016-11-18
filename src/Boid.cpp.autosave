@@ -191,7 +191,7 @@ PVector Boid::swarm(std::vector<Boid> _boids)
 
         if((float)abs(theta)<viewAngle && dist>0 && dist<lineOfSight)
         {
-            if()
+            //if()
             direction.getNormalAntiClockwise();
             direction.normalise();
             direction.div(dist);
@@ -245,6 +245,6 @@ void Boid::view(std::vector<Boid> boids)
 }
 //******end
 
-// method to gather the boids like swarms of flies
+
 
 

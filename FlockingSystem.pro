@@ -23,6 +23,7 @@ SOURCES=$$PWD/src/main.cpp \
         $$PWD/src/PVector.cpp \
         $$PWD/src/Target.cpp \
         $$PWD/src/colorPalette.cpp \
+        $$PWD/src/brushStroke.cpp \
 
 
 
@@ -33,6 +34,8 @@ HEADERS =$$PWD/../common/Image.h \
          $$PWD/include/Boid.h \
          $$PWD/include/Target.h \
          $$PWD/include/colorPalette.h \
+         $$PWD/include/brushStroke.h \
+
 
 
 INCLUDEPATH +=$$PWD/include

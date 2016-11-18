@@ -12,7 +12,8 @@ public:
     PVector m_velocity;
     PVector m_acceleration;
 
-    float m_r;
+    float m_size;
+    int m_brushSize;
     float m_maxspeed;
     float m_maxforce;
 
@@ -20,7 +21,7 @@ public:
 
     Boid(PVector _pos):m_position(_pos.getX(),_pos.getY())
     {
-        m_r = 3.0;
+        m_size = 3.0;
         m_maxspeed = 4;
         m_maxforce = 0.1;
     }
