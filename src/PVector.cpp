@@ -88,3 +88,11 @@ void PVector::getNormalAntiClockwise()
     setX(m_y);
     setY(-temp);
 }
+
+/*
+bool PVector::isMovingTowards(PVector _testPt, PVector _objectPos, PVector _objectVel)
+{
+    PVector toPt = testPt - objectPos;
+    return (toPt.m_x*_objectVel.m_x+toPt.m_y*_objectVel.m_y) > 0;
+}
+*/

@@ -45,10 +45,10 @@ void Boid::flock(std::vector<Boid> boids)
      * and applying the returned steering force
      */
 
-    sep.mult(0);
-    ali.mult(0.0);
-    coh.mult(0.0);
-    swm.mult(3);
+    sep.mult(1);
+    ali.mult(2.0);
+    coh.mult(2.0);
+    swm.mult(0);
 
     applyForce(sep);
     applyForce(ali);
@@ -178,7 +178,7 @@ PVector Boid::swarm(std::vector<Boid> _boids)
     float lineOfSight = 500;
     float viewAngle = M_PI/4;
     std::vector<Boid>::iterator it;
-
+    PVector center(512,360);
     PVector steer(0.0,0.0);
     int count = 0;
 
@@ -191,7 +191,9 @@ PVector Boid::swarm(std::vector<Boid> _boids)
 
         if((float)abs(theta)<viewAngle && dist>0 && dist<lineOfSight)
         {
-            if()
+            /* the direction needs to be changed to getNormalClockwise() if they start moving out of the wi
+             * working on the fix
+             */
             direction.getNormalAntiClockwise();
             direction.normalise();
             direction.div(dist);
@@ -245,6 +247,6 @@ void Boid::view(std::vector<Boid> boids)
 }
 //******end
 
-// method to gather the boids like swarms of flies
+
 
 

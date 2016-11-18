@@ -66,6 +66,7 @@ public:
 
     void getNormalAntiClockwise();
 
+    bool isMovingTowards(PVector, PVector, PVector);
 };
 
 #endif
